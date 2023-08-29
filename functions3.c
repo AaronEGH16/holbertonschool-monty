@@ -9,10 +9,16 @@
 
 void monty_swap(stack_t **stack, unsigned int line_num)
 {
-	(void) line_num;
+	stack_t *top, *box;
 
-	stack_t *top = *stack;
-	stack_t *box = top->next;
+	if ((*stack) == NULL || ((*stack)->next) == NULL)
+	{
+		fprintf(stderr, "L%d: can't swap, stack too short\n", line_num);
+		exit(EXIT_FAILURE);
+	}
+
+	top = *stack;
+	box = top->next;
 
 	top->prev = box;
 	top->next = box->next;
@@ -31,13 +37,21 @@ void monty_swap(stack_t **stack, unsigned int line_num)
 
 void monty_add(stack_t **stack, unsigned int line_num)
 {
-	stack_t *top = *stack;
-	stack_t *top2 = top->next;
-	stack_t *add;
-	stack_t *stackmod = top2->next;
+	stack_t *top, *top2, *add, *stackmod;
+	int first, second;
 
-	int first = top->n;
-	int second = top2->n;
+	if ((*stack) == NULL || ((*stack)->next) == NULL)
+	{
+		fprintf(stderr, "L%d: can't add, stack too short\n", line_num);
+		exit(EXIT_FAILURE);
+	}
+
+	top = *stack;
+	top2 = top->next;
+	stackmod = top2->next;
+
+	first = top->n;
+	second = top2->n;
 
 	add = malloc(sizeof(stack_t));
 	if (!add)
@@ -48,8 +62,14 @@ void monty_add(stack_t **stack, unsigned int line_num)
 
 	add->prev = NULL;
 	add->n = (first) + (second);
-	add->next = stackmod;
-	stackmod->prev = add;
+
+	if (stackmod != NULL)
+	{
+		add->next = stackmod;
+		stackmod->prev = add;
+	}
+	else
+		add->next = NULL;
 
 	free(top);
 	free(top2);
