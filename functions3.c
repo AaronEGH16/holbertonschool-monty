@@ -11,11 +11,12 @@ void monty_swap(stack_t **stack, unsigned int line_num)
 {
 	(void) line_num;
 
-	stack_t *box = *stack->next;
+	stack_t *top = *stack;
+	stack_t *box = top->next;
 
-	*stack->prev = box;
-	*stack->next = box->next;
-	box->next = *stack;
+	top->prev = box;
+	top->next = box->next;
+	box->next = top;
 	box->prev = NULL;
 
 	*stack = box;
@@ -32,11 +33,12 @@ void monty_add(stack_t **stack, unsigned int line_num)
 {
 	(void) line_num;
 
+	stack_t *top = *stack;
 	stack_t *add;
-	stack_t *stackmod = (*stack->next)->next;
+	stack_t *stackmod = (top->next)->next;
 
-	int first = *stack->n;
-	int second = (*stack->next)->n;
+	int first = top->n;
+	int second = (top->next)->n;
 
 	add->prev = NULL;
 	add->n = (first) + (second);
