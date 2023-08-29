@@ -31,22 +31,28 @@ void monty_swap(stack_t **stack, unsigned int line_num)
 
 void monty_add(stack_t **stack, unsigned int line_num)
 {
-	(void) line_num;
-
 	stack_t *top = *stack;
+	stack_t *top2 = top->next;
 	stack_t *add;
-	stack_t *stackmod = (top->next)->next;
+	stack_t *stackmod = top2->next;
 
 	int first = top->n;
-	int second = (top->next)->n;
+	int second = top2->n;
+
+	add = malloc(sizeof(stack_t));
+	if (!add)
+	{
+		fprintf(stderr, "L%d: can't create a new node ADD\n", line_num);
+		exit(EXIT_FAILURE);
+	}
 
 	add->prev = NULL;
 	add->n = (first) + (second);
 	add->next = stackmod;
 	stackmod->prev = add;
 
-	free(first);
-	free(second);
+	free(top);
+	free(top2);
 
 	*stack = add;
 }
